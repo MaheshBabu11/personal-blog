@@ -21,7 +21,7 @@ export default function Home({ posts }) {
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags } = post
+            const { slug, date, title, summary, tags, images, authors } = post
             return (
               <li key={slug} className="py-12">
                 <article>
@@ -30,6 +30,15 @@ export default function Home({ posts }) {
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                      </dd>
+                      <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                        {authors &&
+                          authors.map((author, index) => (
+                            <span key={index}>
+                              {author}
+                              {index !== authors.length - 1 && ', '}
+                            </span>
+                          ))}
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
@@ -43,7 +52,11 @@ export default function Home({ posts }) {
                               {title}
                             </Link>
                           </h2>
-                          <div className="flex flex-wrap">
+                          <div className="mt-4">
+                            <img src={images} className="h-25" />
+                          </div>
+
+                          <div className="m-4 flex flex-wrap">
                             {tags.map((tag) => (
                               <Tag key={tag} text={tag} />
                             ))}
