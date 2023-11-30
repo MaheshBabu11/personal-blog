@@ -12,16 +12,13 @@ export default function Home({ posts }) {
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            Latest
+            Latest posts
           </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
-          </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags, images, authors } = post
+            const { slug, date, title, summary, tags, images } = post
             return (
               <li key={slug} className="py-12">
                 <article>
@@ -31,15 +28,9 @@ export default function Home({ posts }) {
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
                       </dd>
-                      <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                        {authors &&
-                          authors.map((author, index) => (
-                            <span key={index}>
-                              {author}
-                              {index !== authors.length - 1 && ', '}
-                            </span>
-                          ))}
-                      </dd>
+                      <div className="mt-2">
+                        <img src={images} className="h-25 w-60" />
+                      </div>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
                       <div className="space-y-6">
@@ -52,12 +43,9 @@ export default function Home({ posts }) {
                               {title}
                             </Link>
                           </h2>
-                          <div className="mt-4">
-                            <img src={images} className="h-25" />
-                          </div>
 
-                          <div className="m-4 flex flex-wrap">
-                            {tags.map((tag) => (
+                          <div className="flex flex-wrap">
+                            {tags.sort().map((tag) => (
                               <Tag key={tag} text={tag} />
                             ))}
                           </div>

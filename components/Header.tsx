@@ -1,10 +1,13 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
+import Image from 'next/image'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import logo from '@/data/logo.png'
+
+const imageSize = 150
 
 const Header = () => {
   return (
@@ -13,11 +16,25 @@ const Header = () => {
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between">
             <div className="mr-3">
-              <Logo />
+              <Image
+                src={logo}
+                width={imageSize}
+                height={imageSize}
+                alt="Logo"
+                className="logo"
+                quality="95"
+              />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
-              <div className="hidden h-6 text-2xl font-semibold sm:block">
+              <div className="hidden text-3xl font-semibold sm:block">
                 {siteMetadata.headerTitle}
+                <br />
+                <div
+                  className="text-sm font-normal sm:block
+                "
+                >
+                  {siteMetadata.description}
+                </div>
               </div>
             ) : (
               siteMetadata.headerTitle

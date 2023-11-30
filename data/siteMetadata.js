@@ -2,8 +2,8 @@
 const siteMetadata = {
   title: 'Mahesh\'s Blog',
   author: 'Mahesh Babu',
-  headerTitle: 'Mahesh\'s Blog',
-  description: 'My personal blog where i write about my learnings and experiences.',
+  headerTitle: 'Mahesh\'s Tech Blog',
+  description: 'A blog about java, spring boot, programming, web development and everything else.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
