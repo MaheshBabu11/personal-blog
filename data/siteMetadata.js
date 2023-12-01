@@ -9,7 +9,7 @@ const siteMetadata = {
   siteUrl: 'https://blog.maheshbabu11.dev/',
   siteRepo: 'https://github.com/MaheshBabu11/personal-blog',
   siteLogo: '/static/images/logo.png',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/code-coffee-repeat.png',
   mastodon: 'https://mastodon.social/@maheshbabu11',
   email: 'mahesh.b.pec@gmail.com',
   github: 'https://github.com/maheshbabu11',
