@@ -6,7 +6,7 @@ const siteMetadata = {
   description: 'A blog about java, spring boot, programming, web development and everything else.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
+  siteUrl: 'https://blog.maheshbabu11.dev/',
   siteRepo: 'https://github.com/MaheshBabu11/personal-blog',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
