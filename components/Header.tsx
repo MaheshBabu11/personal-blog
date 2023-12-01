@@ -5,7 +5,7 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
-import logo from '@/data/logo.png'
+import logo from '@/data/icon.png'
 
 const imageSize = 150
 

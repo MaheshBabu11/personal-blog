@@ -26,7 +26,7 @@ In our case, we are going to download the project from Vaadin Starter with the f
 Once the project has been downloaded you can open it in the IDE of your choice, I use IntelliJ Idea. Now let's add the Spring AI dependency.
 
 The Spring AI project provides artifacts in the Spring Milestone Repository. You will need to add configuration to add a reference to the Spring Milestone repository in your build file. For example, in our case ie. for Maven, add the following repository definition in Your POM.xml file.
-
+```xml
     <repositories>
         <repository>
           <id>spring-snapshots</id>
@@ -37,7 +37,7 @@ The Spring AI project provides artifacts in the Spring Milestone Repository. You
           </releases>
         </repository>
       </repositories>
-
+```
 And the Spring Boot Starter depending on if you are using Azure Open AI or Open AI.
 
 * Azure OpenAI

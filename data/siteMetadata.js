@@ -1,8 +1,8 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Mahesh\'s Blog',
+  title: 'Code-Coffee-Repeat',
   author: 'Mahesh Babu',
-  headerTitle: 'Mahesh\'s Tech Blog',
+  headerTitle: 'Code-Coffee-Repeat',
   description: 'A blog about java, spring boot, programming, web development and everything else.',
   language: 'en-us',
   theme: 'system', // system, dark or light
