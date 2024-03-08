@@ -1,7 +1,7 @@
 ---
-title: Bridging the Gap: Full Stack Development with HTMX and Spring Boot Showcase
+title: Bridging the Gap - Full Stack Development with HTMX and Spring Boot Showcase
 date: '2024-03-08'
-tags: ['spring', 'htmx', 'java','full-stack']
+tags: ['spring', 'htmx', 'java', 'full-stack']
 draft: false
 summary: Creating an ASCII art generator using HTMX and Spring Boot to showcase the power of full-stack development.
 images: https://cdn-images-1.medium.com/max/13824/1*aj8Tc_O_5KiIYxSrGh2H4g.png
@@ -46,7 +46,115 @@ Now let's get started on coding the application. Please use the below folder str
 ![folder structure](https://cdn-images-1.medium.com/max/2000/1*yGyafyf_QuIRIqUrs3JApA.png)
 
 I have created the UI template in the template directory which looks something like this (index.html)
-{% gist https://gist.github.com/MaheshBabu11/7a7f271330a20a26d761219c2d22dc9a.js %}
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>ASCII Art Generator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+      <h1 class="mb-8 text-center text-4xl font-bold">ASCII Art Generator</h1>
+      <div class="mb-6 flex justify-center">
+        <form id="input-form" class="text-center">
+          <label for="input-text" class="mb-2 block">Enter Text:</label>
+          <input
+            type="text"
+            id="input-text"
+            name="input-text"
+            required
+            class="w-full rounded-md border px-4 py-2 focus:border-blue-500 focus:outline-none"
+          />
+          <br />
+
+          <label for="font-select" class="mb-2 mt-4 block">Select Font:</label>
+          <select
+            id="font-select"
+            name="font-select"
+            class="w-full rounded-md border px-4 py-2 focus:border-blue-500 focus:outline-none"
+          ></select>
+          <div hx-get="/api/fonts" hx-trigger="load" hx-target="#font-select"></div>
+          <br />
+          <button
+            class="mt-6 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            hx-post="/api/ascii-art"
+            hx-target="#ascii-art"
+            hx-swap="outerHTML"
+          >
+            Generate ASCII Art
+          </button>
+        </form>
+      </div>
+
+      <div class="mt-10 flex justify-center">
+        <pre id="ascii-art" class="text-center"></pre>
+      </div>
+
+      <div class="mt-8 flex justify-center space-x-4">
+        <button
+          class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          id="copyButton"
+          onclick="copyToClipboard()"
+          style="display: none;"
+        >
+          Copy
+        </button>
+        <button
+          class="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+          id="downloadButton"
+          onclick="downloadFile()"
+          style="display: none;"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+    <script>
+      function copyToClipboard() {
+        const el = document.createElement('textarea')
+        el.value = document.getElementById('ascii-art').textContent
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        console.log('Copied to clipboard')
+        document.body.removeChild(el)
+      }
+
+      function downloadFile() {
+        const asciiArtContent = document.getElementById('ascii-art').textContent
+        const blob = new Blob([asciiArtContent], { type: 'text/plain' })
+        const downloadLink = document.createElement('a')
+        downloadLink.href = window.URL.createObjectURL(blob)
+        downloadLink.download = 'ascii_art.txt'
+        document.body.appendChild(downloadLink)
+        downloadLink.click()
+        document.body.removeChild(downloadLink)
+      }
+
+      function adjustButtonVisibility() {
+        const asciiArt = document.getElementById('ascii-art')
+        const copyButton = document.getElementById('copyButton')
+        const downloadButton = document.getElementById('downloadButton')
+        copyButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none'
+        downloadButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none'
+      }
+
+      document.body.addEventListener('htmx:afterSwap', adjustButtonVisibility)
+    </script>
+  </body>
+</html>
+```
+
 This file represents the web page for an ASCII Art Generator, incorporating the Tailwind CSS framework for styling and the HTMX library for seamless interaction between the front end and back end. Let’s break down the key components and functionality of the code:
 
 - The Tailwind CSS stylesheet is linked from a CDN for styling purposes.
@@ -69,15 +177,17 @@ These are the tags we used here in addition to that we are using the below JavaS
 
 1.  **copyToClipboard** Function:
 
-    function copyToClipboard() {
-    const el = document.createElement('textarea');
-    el.value = document.getElementById('ascii-art').textContent;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    console.log("Copied to clipboard");
-    document.body.removeChild(el);
-    }
+```javascript
+function copyToClipboard() {
+  const el = document.createElement('textarea')
+  el.value = document.getElementById('ascii-art').textContent
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  console.log('Copied to clipboard')
+  document.body.removeChild(el)
+}
+```
 
 - This function is responsible for copying the text content of the ASCII art to the clipboard.
 
@@ -85,16 +195,18 @@ These are the tags we used here in addition to that we are using the below JavaS
 
 2. **downloadFile** Function:
 
-   function downloadFile() {
-   const asciiArtContent = document.getElementById('ascii-art').textContent;
-   const blob = new Blob([asciiArtContent], { type: 'text/plain' });
-   const downloadLink = document.createElement('a');
-   downloadLink.href = window.URL.createObjectURL(blob);
-   downloadLink.download = 'ascii_art.txt';
-   document.body.appendChild(downloadLink);
-   downloadLink.click();
-   document.body.removeChild(downloadLink);
-   }
+```javascript
+function downloadFile() {
+  const asciiArtContent = document.getElementById('ascii-art').textContent
+  const blob = new Blob([asciiArtContent], { type: 'text/plain' })
+  const downloadLink = document.createElement('a')
+  downloadLink.href = window.URL.createObjectURL(blob)
+  downloadLink.download = 'ascii_art.txt'
+  document.body.appendChild(downloadLink)
+  downloadLink.click()
+  document.body.removeChild(downloadLink)
+}
+```
 
 - This function is responsible for generating a downloadable file containing the ASCII art.
 
@@ -102,27 +214,64 @@ These are the tags we used here in addition to that we are using the below JavaS
 
 3. **adjustButtonVisibility** Function:
 
-   function adjustButtonVisibility() {
-   const asciiArt = document.getElementById('ascii-art');
-   const copyButton = document.getElementById('copyButton');
-   const downloadButton = document.getElementById('downloadButton');
-   copyButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none';
-   downloadButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none';
-   }
+```javascript
+function adjustButtonVisibility() {
+  const asciiArt = document.getElementById('ascii-art')
+  const copyButton = document.getElementById('copyButton')
+  const downloadButton = document.getElementById('downloadButton')
+  copyButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none'
+  downloadButton.style.display = asciiArt.textContent.trim() ? 'inline-block' : 'none'
+}
+```
 
 - This function dynamically adjusts the visibility of the copy and download buttons based on the content of the ASCII art.
 
 - It checks whether the trimmed text content of the `#ascii-art` element is non-empty. If it is, the buttons are set to be displayed (`’inline-block’`), otherwise, they are set to be hidden (`’none’`).
 
 Now we have the UI ready we need to create the APIs /api/ascii-art and /api/fonts . We will use the PageController as below for this:
-{% gist https://gist.github.com/MaheshBabu11/951b57a534f7ca148921b66d46943fc1.js %}
+
+```java
+package dev.maheshbabu11.asciiartgenerator;
+
+import io.leego.banana.BananaUtils;
+import io.leego.banana.Font;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class PageController {
+
+    @GetMapping("/fonts")
+    public String getFonts() {
+        List<String> options = Font.values().stream().map(Font::getName).toList();
+        StringBuilder optionList = new StringBuilder();
+        options.forEach(
+                option -> {
+                    String optionString = "<option value=\"" + option + "\">" + option + "</option>";
+                    optionList.append(optionString);
+                }
+        );
+        return optionList.toString();
+    }
+
+    @PostMapping("/ascii-art")
+    public String asciiArt(@RequestParam("input-text") String inputText,
+                           @RequestParam("font-select") String font) {
+        return "<pre id=\"ascii-art\">" + BananaUtils.bananaify(inputText, Font.get(font)) + "</pre>";
+    }
+
+}
+```
+
 Certainly! Let’s break down the functionality of both APIs defined in the provided Java code:
 
 1.  /api/fonts :
-    This API is called to provide a list of font options that can be used in the ASCII art generator. It retrieves a list of font names from the **Font** enum, which is part of the Banana library. Using Java Stream API, it maps each font name to an HTML _<option>_ element and appends them to a _StringBuilder_. The method returns the concatenation of these _<option>_ elements as a single HTML string.
+    This API is called to provide a list of font options that can be used in the ASCII art generator. It retrieves a list of font names from the **Font** enum, which is part of the Banana library. Using Java Stream API, it maps each font name to an HTML ```<option>``` element and appends them to a StringBuilder. The method returns the concatenation of these ```<option>``` elements as a single HTML string.
 
 2.  /api/ascii-art :
-    This API takes user input text and the selected font as parameters and generates ASCII art accordingly. It uses the BanaUtils.bananaify method is then used to generate ASCII art based on the input text and selected font. The generated ASCII art is wrapped in a _<pre>_ HTML tag.
+    This API takes user input text and the selected font as parameters and generates ASCII art accordingly. It uses the BanaUtils.bananaify method is then used to generate ASCII art based on the input text and selected font. The generated ASCII art is wrapped in a ```<pre>``` HTML tag.
 
 Now that we have the code let's run the application. Once the application is started you can go to [http://localhost:8080/](http://localhost:8080/) and try out the application.
 
